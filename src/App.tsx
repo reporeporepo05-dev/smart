@@ -40,17 +40,23 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {!isSetup && <Route path="*" element={<Navigate to="/install" replace />} />}
-        
-        <Route path="/install" element={isSetup ? <Navigate to="/login" replace /> : <InstallationWizard />} />
-        <Route path="/login" element={<Login />} />
-
-        <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-          <Route index element={<Dashboard />} />
-          <Route path="send-single" element={<SendSingleSMS />} />
-          <Route path="send-bulk" element={<SendBulkSMS />} />
-          <Route path="history" element={<History />} />
-        </Route>
+        {!isSetup ? (
+          <>
+            <Route path="/install" element={<InstallationWizard />} />
+            <Route path="*" element={<Navigate to="/install" replace />} />
+          </>
+        ) : (
+          <>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+              <Route index element={<Dashboard />} />
+              <Route path="send-single" element={<SendSingleSMS />} />
+              <Route path="send-bulk" element={<SendBulkSMS />} />
+              <Route path="history" element={<History />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        )}
       </Routes>
     </BrowserRouter>
   );

@@ -26,12 +26,13 @@ const authenticate = (req: any, res: any, next: any) => {
 };
 
 router.get('/check-setup', async (req, res) => {
-  const db = getPool();
   try {
+    await setupDatabase();
+    const db = getPool();
     const [rows] = await db.query('SELECT 1 FROM users LIMIT 1');
     res.json({ isSetup: (rows as any[]).length > 0 });
   } catch (err) {
-    // If table doesn't exist, it means not setup
+    // If connection fails or table doesn't exist
     res.json({ isSetup: false });
   }
 });
